@@ -4,7 +4,7 @@ from surveys import satisfaction_survey as survey
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "never-tell!"
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
@@ -38,6 +38,9 @@ def show_survey_question(question_number):
     on the page depending on how far the user has progressed through the
     survey (IE first question, then second, and so on).
     """
+    if len(RESPONSES) == question_number:
+        return redirect("/complete")
+
     question = survey.questions[question_number]
 
     return render_template(
@@ -45,4 +48,24 @@ def show_survey_question(question_number):
         prompt=question.prompt,
         choices=question.choices
     )
+
+@app.post("/answer")
+def handle_answer():
+    """Append response to response list and redirect to question/"""
+    # What if they do not choose an answer? -> BadRequest
+    answer = request.form["answer"]
+    RESPONSES.append(answer)
+
+    print(f"Responses = {RESPONSES}")
+
+    return redirect(f"/questions/{len(RESPONSES)}")
+
+@app.get("/complete")
+def show_completion():
+    """SHow completion page when survey is complete"""
+
+    return render_template("completion.html",
+                           questions=survey.questions,
+                           responses=RESPONSES)
+
 
