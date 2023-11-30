@@ -12,6 +12,7 @@ class Question:
         self.prompt = prompt
         self.choices = choices
         self.allow_text = allow_text
+    # TODO: Add repr method
 
 
 class Survey:
@@ -28,6 +29,7 @@ class Survey:
         self.instructions = instructions
         self.questions = questions
 
+    # TODO: Add repr method
 
 satisfaction_survey = Survey(
     "Customer Satisfaction Survey",

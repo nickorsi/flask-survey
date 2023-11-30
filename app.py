@@ -7,3 +7,42 @@ app.config['SECRET_KEY'] = "never-tell!"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
+
+RESPONSES = []
+
+@app.get("/")
+def home():
+    """Shows survey information based on the instance of the survey
+        -Starts with default satisfaction_survey instance
+        -Populates survey with survey title, instructions, and a button
+    """
+
+    return render_template(
+        "survey_start.html",
+        title=survey.title,
+        instructions=survey.instructions
+    )
+
+@app.post("/begin")
+def survey_redirect():
+    """Route that handles initial survey start form submission. Per
+    given instructions, the form must get to '/questions/0' but the
+    given start form and instructions, the form lands at /begin. Must
+    redirect.
+    """
+    return redirect("/questions/0")
+
+@app.get("/questions/<int:question_number>")
+def show_survey_question(question_number):
+    """Route that handles each survey question, it renders the question
+    on the page depending on how far the user has progressed through the
+    survey (IE first question, then second, and so on).
+    """
+    question = survey.questions[question_number]
+
+    return render_template(
+        "question.html",
+        prompt=question.prompt,
+        choices=question.choices
+    )
+
