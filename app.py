@@ -10,6 +10,7 @@ debug = DebugToolbarExtension(app)
 
 RESPONSES = []
 
+
 @app.get("/")
 def home():
     """Shows survey information based on the instance of the survey
@@ -23,6 +24,7 @@ def home():
         instructions=survey.instructions
     )
 
+
 @app.post("/begin")
 def survey_redirect():
     """Route that handles initial survey start form submission. Per
@@ -32,13 +34,14 @@ def survey_redirect():
     """
     return redirect("/questions/0")
 
+
 @app.get("/questions/<int:question_number>")
 def show_survey_question(question_number):
     """Route that handles each survey question, it renders the question
     on the page depending on how far the user has progressed through the
     survey (IE first question, then second, and so on).
     """
-    if len(RESPONSES) == question_number:
+    if len(RESPONSES) == len(survey.questions):
         return redirect("/complete")
 
     question = survey.questions[question_number]
@@ -49,23 +52,27 @@ def show_survey_question(question_number):
         choices=question.choices
     )
 
+
 @app.post("/answer")
 def handle_answer():
     """Append response to response list and redirect to question/"""
     # What if they do not choose an answer? -> BadRequest
-    answer = request.form["answer"]
+    answer = request.form.get("answer", None)
+    # if answer:
     RESPONSES.append(answer)
 
     print(f"Responses = {RESPONSES}")
 
     return redirect(f"/questions/{len(RESPONSES)}")
+    # else:
+    #     return render_template
+
 
 @app.get("/complete")
 def show_completion():
-    """SHow completion page when survey is complete"""
+    """Show completion page when survey is complete"""
 
     return render_template("completion.html",
+                           indices=range(0, len(RESPONSES)),
                            questions=survey.questions,
                            responses=RESPONSES)
-
-

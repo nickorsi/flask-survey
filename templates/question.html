@@ -1,22 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 
-  <h1>{{ prompt }}</h1>
+<h1>{{ prompt }}</h1>
 
-  <form action="/answer" method="POST">
+<form action="/answer" method="POST">
 
-    {% for choice in choices %}
-      <!-- you should have one item like this for every choice -->
-      <p>
-        <input
-            type="radio"
-            name="answer"
-            value="{{ choice }}">
-        {{ choice }}
-      </p>
+  {% for choice in choices %}
+  <!-- you should have one item like this for every choice -->
+  <p>
+    <input type="radio" name="answer" value="{{ choice }}">
+    {{ choice }}
+  </p>
 
-    {% endfor %}
-    <button>Continue</button>
-  </form>
+  {% endfor %}
+  <button>Continue</button>
+</form>
 
 {% endblock %}
