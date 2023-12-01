@@ -4,9 +4,13 @@
 
 <h1>Thanks for completing this survey!</h1>
 <ul>
-  {% for index in indices %}
-  <li><strong>{{ questions[index].prompt }}</strong> {{ responses[index] }}</li>
+  {% for q, a in q_and_a %}
+  <li><strong>{{ q }}</strong> {{ a }}</li>
   {% endfor %}
+
+    {# {% for index in indices %}
+  <li><strong>{{ questions[index].prompt }}</strong> {{ responses[index] }}</li>
+  {% endfor %} #}
 
 </ul>
 

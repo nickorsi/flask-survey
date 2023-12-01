@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% for msg in get_flashed_messages() %}
+<h2>{{ msg }}</h2>
+{% endfor %}
+
 <h1>{{ prompt }}</h1>
 
 <form action="/answer" method="POST">
+
 
   {% for choice in choices %}
   <!-- you should have one item like this for every choice -->
