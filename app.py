@@ -7,7 +7,7 @@ app.config['SECRET_KEY'] = "never-tell!"
 # app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
-
+# TODO: All lowercases, this is not a constant global variable
 RESPONSES = []
 
 
@@ -17,7 +17,8 @@ def home():
         -Starts with default satisfaction_survey instance
         -Populates survey with survey title, instructions, and a button
     """
-
+    # Broswers COULD cache get requests!
+    # RESPONSES.clear()
     return render_template(
         "survey_start.html",
         title=survey.title,
@@ -32,6 +33,8 @@ def survey_redirect():
     given start form and instructions, the form lands at /begin. Must
     redirect.
     """
+    # Broswers will not cache post requests!
+    RESPONSES.clear()
     return redirect("/questions/0")
 
 
